@@ -1,4 +1,4 @@
-# Ansible Instalation of Ansible-Server
+# Ansible Installation of Ansible-Server
  
 # To set host name in all nodes 
 ```
