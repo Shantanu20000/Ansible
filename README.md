@@ -54,7 +54,7 @@ vi /etc/ssh/sshd_config
 # Uncomment line number 38, 61 and Comment the line number 63
 
 38. PermitRootLogin yes        
-
+.
 61. PasswordAuthentication yes   
 
 # Comment 
