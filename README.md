@@ -105,5 +105,5 @@ ansible <group-name> -a "systemctl start httpd"
 
 # For remove httpd sevice.
 ```
-ansible demo -ba "yum remove httpd -y"    
+ansible <group-name> -ba "yum remove httpd -y"    
 ```
