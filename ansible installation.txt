@@ -1,78 +1,108 @@
-#installation process of ansible-server 
-
-hostnamectl set-hostname control # to set host name 
-
+# Installation process of ansible-server 
+# To set host name in all nodes 
+```
+hostnamectl set-hostname <Your_host_name>
+```
+# Installation of ansible
+```
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-
 yum install epel-release-latest-7.noarch.rpm -y 
-
 yum update -y 
-
-
 yum install git python python-level python.pip openssl ansible -y 
-
-ansible --version #to check ansible installed or not 
-
-vi /etc/ansible/hosts #below line number 11 add one group and ip addresses 
-
-[demo]
+```
+# Check version
+```
+ansible --version 
+```
+# Bellow line number 11 add one group in [] and private ip-addresses of worker-nodes
+```
+vi /etc/ansible/hosts  
+```
+# As like bellow. 
+```
+[group-name]
 private ip of node-1 
 private ip of node-2 
-
-vi /etc/ansible/ansible.cfg  #do few changes in this file 
-
-Uncomment
-#inventory = /etc/ansible/hosts
-# sudo-user = root 
-
-Now create one user, in all the three instances 
-
+```
+# Do few changes in this file
+```
+vi /etc/ansible/ansible.cfg   
+```
+# Uncomment bellow lines.
+1. inventory = /etc/ansible/hosts
+2. sudo-user = root 
+# Now create one user, in all the three instances 
+```
 adduser ansible  
-
-passwd ansible #give password to in machine 
-
-visudo #line number 101 add ansible user in all node
-
+```
+# Give password to in machine
+```
+passwd ansible  
+```
+# Line number 101 add ansible user in all node
+```
+visudo 
+```
+```
 ansible ALL=(ALL) NOPASSWD: ALL 
+```
+# Do it in all service node and other node
+```
+vi /etc/ssh/sshd_config    
+```
+# Uncomment line number 38, 61 and Comment the line number 63
 
-vi /etc/ssh/sshd_config   #do it in all service node and other node 
+1. PermitRootLogin yes        
 
-uncomment 
+2. PasswordAuthentication yes   
 
-PermitRootLogin yes        #line number 38
-PasswordAuthentication yes     #line number 61 
+# Comment 
 
-comment 
-
-#PasswordAuthentication no  # line number 63 
-
+3. PasswordAuthentication no   
+# Start sshd service.
+```
 service sshd restart 
-
-su - ansible # in all node
-
-ssh <private of node> # we can access node 
-
-Now go to ansible server and create keys 
-
-user ansible ] ssh-keygen 
-
+```
+# Switch user in all node.
+```
+su - ansible 
+```
+# We can access node
+```
+ssh <private of node>  
+```
+# Now go to ansible server and create keys for ansible user. 
+```
+ssh-keygen
 cd .ssh 
-
+ls
+```
+# Send Public key to All worker nodes.
+```
 ssh-copy-id ansible@<private ip of node> 
+```
+# Enter passwor of node ansible user 
 
-enter passwor of node ansible user 
+# Go to Mater Node and check hosts with following command. 
+```
+ansible all --list-hosts 
+```
+# To check groups.
+```
+ansible <group-name> --list-hosts  
+```
+Ad-hoc Commands 
+```
+ansible all/<group-name> -a "ls" 
+```
+# Simple Site Hosting.
+```
+ansible <group-name> -a "sudo yum install httpd -y"
+ansible <group-name> -a "systemctl start httpd"
+```
+# Hit public Ip of worker Node you will see "It's Work" page of httpd.
 
-ansible all --list-hosts  # to check hosts 
-
-ansible demo --list-hosts # to check groups 
-
-Ad-hoc Commands
-
-ansible demo -a "ls" 
-
-ansible all -a "ls" 
-
-
-ansible demo -a "sudo yum install httpd -y"
-
-ansible demo -ba "yum remove httpd -y"   #we can use ba to avoid sudo 
+# For remove httpd sevice.
+```
+ansible demo -ba "yum remove httpd -y"    
+```
