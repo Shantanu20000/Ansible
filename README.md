@@ -53,13 +53,13 @@ vi /etc/ssh/sshd_config
 ```
 # Uncomment line number 38, 61 and Comment the line number 63
 
-38. PermitRootLogin yes        
-.
-61. PasswordAuthentication yes   
+1. PermitRootLogin yes        
+
+2. PasswordAuthentication yes   
 
 # Comment 
 
-63. PasswordAuthentication no   
+3. PasswordAuthentication no   
 # Start sshd service.
 ```
 service sshd restart 
